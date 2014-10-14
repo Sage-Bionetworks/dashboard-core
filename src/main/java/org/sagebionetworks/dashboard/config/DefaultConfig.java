@@ -16,9 +16,6 @@ import java.util.Properties;
  */
 public class DefaultConfig extends AbstractConfig {
 
-    private final Stack stack;
-    private final Properties properties;
-
     public DefaultConfig(final String configFile) throws IOException {
         // Read about the stack
         PropertiesProvider stackProvider =
@@ -65,4 +62,7 @@ public class DefaultConfig extends AbstractConfig {
                 new StackPropertiesProvider(stack,
                 new FilePropertiesProvider(new File(configFile)))));
     }
+
+    private final Stack stack;
+    private final Properties properties;
 }

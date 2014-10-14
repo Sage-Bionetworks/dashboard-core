@@ -8,8 +8,6 @@ import java.util.Properties;
 
 public class FilePropertiesProvider implements PropertiesProvider {
 
-    private final Properties properties;
-
     public FilePropertiesProvider(File file) throws IOException {
         final InputStream inputStream = new FileInputStream(file);
         try {
@@ -39,4 +37,6 @@ public class FilePropertiesProvider implements PropertiesProvider {
     public Properties getProperties() {
         return properties;
     }
+
+    private final Properties properties;
 }

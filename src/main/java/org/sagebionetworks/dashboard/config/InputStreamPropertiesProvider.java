@@ -6,8 +6,6 @@ import java.util.Properties;
 
 public class InputStreamPropertiesProvider implements PropertiesProvider {
 
-    private final Properties properties;
-
     /**
      * The specified stream remains open after this method returns.
      */
@@ -30,4 +28,6 @@ public class InputStreamPropertiesProvider implements PropertiesProvider {
     public Properties getProperties() {
         return properties;
     }
+
+    private final Properties properties;
 }

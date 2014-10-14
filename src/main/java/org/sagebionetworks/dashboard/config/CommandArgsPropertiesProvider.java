@@ -7,8 +7,6 @@ import java.util.Properties;
  */
 public class CommandArgsPropertiesProvider implements PropertiesProvider {
 
-    private final Properties properties;
-
     public CommandArgsPropertiesProvider(PropertiesProvider provider) {
         PropertyReader cmdArgsReader = new CommandArgsPropertyReader();
         Properties original = provider.getProperties();
@@ -19,4 +17,6 @@ public class CommandArgsPropertiesProvider implements PropertiesProvider {
     public Properties getProperties() {
         return properties;
     }
+
+    private final Properties properties;
 }

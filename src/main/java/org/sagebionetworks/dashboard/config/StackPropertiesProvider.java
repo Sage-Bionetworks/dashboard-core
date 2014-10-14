@@ -7,8 +7,6 @@ import java.util.Properties;
  */
 public class StackPropertiesProvider implements PropertiesProvider {
 
-    private final Properties properties;
-
     public StackPropertiesProvider(final Stack stack, final PropertiesProvider provider) {
         final Properties src = provider.getProperties();
         final Properties dest = new Properties();
@@ -58,4 +56,6 @@ public class StackPropertiesProvider implements PropertiesProvider {
     private String getStackPrefix(final Stack stack) {
         return stack.name().toLowerCase() + PropertyReader.SEPARATOR;
     }
+
+    private final Properties properties;
 }
