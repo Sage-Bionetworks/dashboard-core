@@ -1,6 +1,8 @@
 dashboard-core
 ==============
 
+[![Build Status](https://travis-ci.org/Sage-Bionetworks/dashboard-core.svg?branch=master)](https://travis-ci.org/Sage-Bionetworks/dashboard-core)
+
 Shared by all the dashboard packages.
 
 1. Install Vagrant
