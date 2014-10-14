@@ -7,8 +7,6 @@ import java.util.Properties;
  */
 public class EnvPropertiesProvider implements PropertiesProvider {
 
-    private final Properties properties;
-
     public EnvPropertiesProvider(PropertiesProvider provider) {
         PropertyReader envReader = new EnvPropertyReader();
         Properties original = provider.getProperties();
@@ -19,4 +17,6 @@ public class EnvPropertiesProvider implements PropertiesProvider {
     public Properties getProperties() {
         return properties;
     }
+
+    private final Properties properties;
 }

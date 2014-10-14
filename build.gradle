@@ -1,24 +1,25 @@
 group = 'org.sagebionetworks'
 ext.name = 'dashboard-core'
-version = '0.1.0-' + (new Date()).format(
+version = '0.1.1-' + (new Date()).format(
         'yyyyMMddHHmmss', TimeZone.getTimeZone("UTC"))
 
 /*** Java ***/
 
 apply plugin: 'java'
 
-jar {
-    group = project.group
-    baseName = project.ext.name
-    version = project.version
-}
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile 'org.apache.shiro:shiro-core:1.2.3'
     testCompile 'junit:junit:4.11'
+}
+
+jar {
+    group = project.group
+    baseName = project.ext.name
+    version = project.version
 }
 
 /*** Eclipse ***/
@@ -83,7 +84,6 @@ artifactory {
 /*** Maven Publishing ***/
 
 apply plugin: 'maven-publish'
-
 publishing {
     publications {
         mavenJava(MavenPublication) {

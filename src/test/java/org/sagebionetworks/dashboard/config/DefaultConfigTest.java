@@ -18,12 +18,15 @@ public class DefaultConfigTest {
     @After
     public void after() {
         System.clearProperty("key.a");
+        System.clearProperty(PropertyReader.STACK);
+        System.clearProperty(PropertyReader.STACK_PASSWORD);
     }
 
     @Test
     public void test() throws Exception {
+        System.setProperty(PropertyReader.STACK, Stack.DEVELOP.name());
         String configFile = getClass().getResource("/test.config").getFile(); 
-        Config config = new DefaultConfig(Stack.DEVELOP, configFile);
+        Config config = new DefaultConfig(configFile);
         assertEquals(Stack.DEVELOP, config.getStack());
         assertEquals("developValueA", config.get("key.a"));
         assertEquals("developValueB", config.get("key.b"));
@@ -32,5 +35,17 @@ public class DefaultConfigTest {
         assertEquals(52, config.getInt("key.e"));
         assertEquals(52L, config.getLong("key.e"));
         assertTrue(config.getBoolean("key.f"));
+    }
+
+    @Test
+    public void testEncryption() throws Exception {
+        System.setProperty(PropertyReader.STACK, Stack.PROD.name());
+        System.setProperty(PropertyReader.STACK_PASSWORD,
+                "S7u5V12WCIXRV5SZbINKywUXEOsiNtevaJQYIaqEnKw=");
+        String configFile = getClass().getResource("/test.config").getFile(); 
+        Config config = new DefaultConfig(configFile);
+        assertEquals(Stack.PROD, config.getStack());
+        assertEquals("prodValueB", config.get("key.b"));
+        assertEquals("prodValueD", config.get("key.d"));
     }
 }
