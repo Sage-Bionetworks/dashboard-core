@@ -4,7 +4,7 @@ import org.sagebionetworks.dashboard.parse.AccessRecord;
 
 public interface AccessRecordDao {
 
-    void put(AccessRecord record);
+    void put(AccessRecord record, String file_id);
 
     void cleanup();
 
