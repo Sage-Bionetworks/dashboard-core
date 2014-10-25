@@ -52,6 +52,34 @@ public class DashboardConfig implements Config {
         return config.getStack();
     }
 
+    public String getAccessRecordBucket() {
+        return config.get("access.record.bucket");
+    }
+
+    public String getAwsAccessKey() {
+        return config.get("aws.access.key");
+    }
+
+    public String getAwsSecretKey() {
+        return config.get("aws.secret.key");
+    }
+
+    public String getDwUsername() {
+        return config.get("dw.username");
+    }
+
+    public String getDwPassword() {
+        return config.get("dw.password");
+    }
+
+    public String getSynapseUser() {
+        return config.get("synapse.user");
+    }
+
+    public String getSynapsePassword() {
+        return config.get("synapse.password");
+    }
+
     private final Logger logger = LoggerFactory.getLogger(DashboardConfig.class);
     private final Config config;
 }
