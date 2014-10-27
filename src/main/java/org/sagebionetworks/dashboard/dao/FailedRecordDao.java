@@ -1,8 +1,8 @@
 package org.sagebionetworks.dashboard.dao;
 
-import org.sagebionetworks.dashboard.model.WriteRecordResult;
-
 public interface FailedRecordDao {
 
-    void put(WriteRecordResult result);
+    void put(String fileId, int lineNumber, String sessionId);
+    void cleanup();
+    long count();
 }
