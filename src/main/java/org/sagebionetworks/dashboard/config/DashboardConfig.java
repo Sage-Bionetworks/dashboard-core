@@ -64,6 +64,10 @@ public class DashboardConfig implements Config {
         return config.get("aws.secret.key");
     }
 
+    public String getDwUrl() {
+        return config.get("dw.url");
+    }
+
     public String getDwUsername() {
         return config.get("dw.username");
     }
