@@ -8,9 +8,9 @@ import java.util.Properties;
 public class SystemPropertiesProvider implements PropertiesProvider {
 
     public SystemPropertiesProvider(PropertiesProvider provider) {
-        PropertyReader cmdArgsReader = new SystemPropertyReader();
+        PropertyReader sysPropReader = new SystemPropertyReader();
         Properties original = provider.getProperties();
-        properties = PropertiesUtils.mergeProperties(cmdArgsReader, original);
+        properties = PropertiesUtils.mergeProperties(sysPropReader, original);
     }
 
     @Override

@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>Load properties in the following order:
  * <ol>
- *   <li>Load all the properties defined in the specified configuration file.
+ *   <li>Load all the properties defined in the specified configuration files.
  *   <li>If a property is for the specified stack, it is chosen over the default value; otherwise,
  *       the default value is used.
  *   <li>Overwrite properties with environment variables.
@@ -16,6 +19,15 @@ import java.util.Properties;
  */
 public class DefaultConfig extends AbstractConfig {
 
+    private final Logger logger = LoggerFactory.getLogger(DefaultConfig.class);
+
+    private final Stack stack;
+    private final Properties properties;
+
+    /**
+     * List of config files, "file0, file1, file2, ...", file1 will overwrite file0,
+     * file2 will overwrite file1, so on and so forth.
+     */
     public DefaultConfig(final String... configFiles) throws IOException {
         // Aggregate properties from files
         final PropertiesProvider filePropertiesProvider = aggregateFiles(configFiles);
@@ -26,8 +38,10 @@ public class DefaultConfig extends AbstractConfig {
         final String stackName = propertiesProvider.getProperties().getProperty(PropertyReader.STACK);
         if (stackName != null) {
             stack = Stack.valueOf(stackName.toUpperCase());
+            logger.info("Stack is " + stack);
         } else {
             stack = Stack.LOCAL;
+            logger.info("Stack is missing. Default to" + Stack.LOCAL.name() + ".");
         }
         // Set up the final properties based on the stack
         final PropertiesProvider provider = new SystemPropertiesProvider(
@@ -53,7 +67,4 @@ public class DefaultConfig extends AbstractConfig {
         }
         return aggregatedProperties;
     }
-
-    private final Stack stack;
-    private final Properties properties;
 }
