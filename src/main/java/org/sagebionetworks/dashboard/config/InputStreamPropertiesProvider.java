@@ -10,8 +10,7 @@ public class InputStreamPropertiesProvider implements PropertiesProvider {
      * The specified stream remains open after this method returns.
      */
     public InputStreamPropertiesProvider(InputStream inputStream) throws IOException {
-        properties = new Properties();
-        properties.load(inputStream);
+        this(inputStream, new BasicPropertiesProvider());
     }
 
     /**

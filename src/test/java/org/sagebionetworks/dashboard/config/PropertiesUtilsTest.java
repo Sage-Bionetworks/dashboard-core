@@ -37,7 +37,7 @@ public class PropertiesUtilsTest {
         Properties original = new Properties();
         original.setProperty(key1, "someValueOf1");
         Properties merged = PropertiesUtils.mergeProperties(
-                new CommandArgsPropertyReader(), original);
+                new SystemPropertyReader(), original);
         assertEquals(value1, merged.getProperty(key1));
         assertNull(merged.getProperty(key2)); // Must be driven by the original
     }

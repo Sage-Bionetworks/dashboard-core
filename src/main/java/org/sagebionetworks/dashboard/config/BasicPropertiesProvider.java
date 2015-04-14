@@ -2,7 +2,17 @@ package org.sagebionetworks.dashboard.config;
 
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Sets the stack to LOCAL if it does not already exist.
+ */
 public class BasicPropertiesProvider implements PropertiesProvider {
+
+    private final Logger logger = LoggerFactory.getLogger(BasicPropertiesProvider.class);
+
+    private final Properties properties;
 
     public BasicPropertiesProvider() {
         properties = getBasicProperties();
@@ -21,9 +31,7 @@ public class BasicPropertiesProvider implements PropertiesProvider {
     private Properties getBasicProperties() {
         Properties properties = new Properties();
         properties.setProperty(PropertyReader.STACK, Stack.LOCAL.name());
-        properties.setProperty(PropertyReader.STACK_PASSWORD, "");
+        logger.info("Stack set to " + properties.getProperty(PropertyReader.STACK));
         return properties;
     }
-
-    private final Properties properties;
 }

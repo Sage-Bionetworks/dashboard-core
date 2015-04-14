@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CommandArgsPropertiesProviderTest {
+public class SystemPropertiesProviderTest {
 
     private String key;
     private String value;
@@ -30,7 +30,7 @@ public class CommandArgsPropertiesProviderTest {
         Properties props = new Properties();
         props.setProperty(key, "someOtherValue");
         PropertiesProvider propsProvider = new BasicPropertiesProvider(props);
-        propsProvider = new CommandArgsPropertiesProvider(propsProvider);
+        propsProvider = new SystemPropertiesProvider(propsProvider);
         assertEquals(value, propsProvider.getProperties().getProperty(key));
     }
 }

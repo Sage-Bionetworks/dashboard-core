@@ -1,7 +1,7 @@
 group = 'org.sagebionetworks'
 ext.name = 'dashboard-core'
-version = '0.1.4-' + (new Date()).format(
-        'yyyyMMddHHmmss', TimeZone.getTimeZone("UTC"))
+version = '0.1.5-' + (new Date()).format(
+        'yyyyMMddHHmm', TimeZone.getTimeZone("UTC"))
 
 /*** Java ***/
 
@@ -12,11 +12,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.shiro:shiro-core:1.2.3'
-    compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'joda-time:joda-time:2.5'
     compile 'org.slf4j:slf4j-api:' + slf4jVersion
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
     testRuntime 'org.slf4j:slf4j-log4j12:' + slf4jVersion
 }
 
@@ -99,5 +96,5 @@ publishing {
 /*** Wrapper ***/
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
+    gradleVersion = '2.3'
 }

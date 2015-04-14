@@ -5,12 +5,12 @@ import java.util.Properties;
 /**
  * Overwrites with command-line arguments. Stack-insensitive.
  */
-public class CommandArgsPropertiesProvider implements PropertiesProvider {
+public class SystemPropertiesProvider implements PropertiesProvider {
 
-    public CommandArgsPropertiesProvider(PropertiesProvider provider) {
-        PropertyReader cmdArgsReader = new CommandArgsPropertyReader();
+    public SystemPropertiesProvider(PropertiesProvider provider) {
+        PropertyReader sysPropReader = new SystemPropertyReader();
         Properties original = provider.getProperties();
-        properties = PropertiesUtils.mergeProperties(cmdArgsReader, original);
+        properties = PropertiesUtils.mergeProperties(sysPropReader, original);
     }
 
     @Override

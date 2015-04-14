@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>Load properties in the following order:
  * <ol>
- *   <li>Load all the properties defined in the specified configuration file.
+ *   <li>Load all the properties defined in the specified configuration files.
  *   <li>If a property is for the specified stack, it is chosen over the default value; otherwise,
  *       the default value is used.
  *   <li>Overwrite properties with environment variables.
@@ -16,23 +19,34 @@ import java.util.Properties;
  */
 public class DefaultConfig extends AbstractConfig {
 
-    public DefaultConfig(final String configFile) throws IOException {
-        // Read about the stack
-        PropertiesProvider stackProvider =
-                new CommandArgsPropertiesProvider(
-                new EnvPropertiesProvider(
-                new FilePropertiesProvider(new File(configFile),
-                new BasicPropertiesProvider())));
-        Properties propertiesForStack = stackProvider.getProperties();
-        String stackName = propertiesForStack.getProperty(PropertyReader.STACK);
+    private final Logger logger = LoggerFactory.getLogger(DefaultConfig.class);
+
+    private final Stack stack;
+    private final Properties properties;
+
+    /**
+     * List of config files, "file0, file1, file2, ...", file1 will overwrite file0,
+     * file2 will overwrite file1, so on and so forth.
+     */
+    public DefaultConfig(final String... configFiles) throws IOException {
+        // Aggregate properties from files
+        final PropertiesProvider filePropertiesProvider = aggregateFiles(configFiles);
+        // Further aggregate with environment variables and system properties
+        final PropertiesProvider propertiesProvider = new SystemPropertiesProvider(
+                new EnvPropertiesProvider(filePropertiesProvider));
+        // Read the stack
+        final String stackName = propertiesProvider.getProperties().getProperty(PropertyReader.STACK);
         if (stackName != null) {
             stack = Stack.valueOf(stackName.toUpperCase());
+            logger.info("Stack is " + stack);
         } else {
             stack = Stack.LOCAL;
+            logger.info("Stack is missing. Default to" + Stack.LOCAL.name() + ".");
         }
-        String stackPassword = propertiesForStack.getProperty(PropertyReader.STACK_PASSWORD);
-        // Set up the properties
-        PropertiesProvider provider = createProvider(stack, stackPassword, configFile);
+        // Set up the final properties based on the stack
+        final PropertiesProvider provider = new SystemPropertiesProvider(
+                new EnvPropertiesProvider(
+                new StackPropertiesProvider(stack, filePropertiesProvider)));
         properties = provider.getProperties();
     }
 
@@ -46,23 +60,11 @@ public class DefaultConfig extends AbstractConfig {
         return properties.getProperty(key);
     }
 
-    private PropertiesProvider createProvider(final Stack stack, final String stackPassword,
-            final String configFile) throws IOException {
-        if (stackPassword != null && !stackPassword.isEmpty()) {
-            return
-                    new CommandArgsPropertiesProvider(
-                    new EnvPropertiesProvider(
-                    new DecryptedPropertiesProvider(stackPassword,
-                    new StackPropertiesProvider(stack,
-                    new FilePropertiesProvider(new File(configFile))))));
+    private PropertiesProvider aggregateFiles(final String... configFiles) throws IOException {
+        PropertiesProvider aggregatedProperties = new BasicPropertiesProvider();
+        for (String configFile : configFiles) {
+            aggregatedProperties = new FilePropertiesProvider(new File(configFile), aggregatedProperties);
         }
-        return
-                new CommandArgsPropertiesProvider(
-                new EnvPropertiesProvider(
-                new StackPropertiesProvider(stack,
-                new FilePropertiesProvider(new File(configFile)))));
+        return aggregatedProperties;
     }
-
-    private final Stack stack;
-    private final Properties properties;
 }
