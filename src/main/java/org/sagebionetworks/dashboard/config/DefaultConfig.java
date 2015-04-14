@@ -63,7 +63,13 @@ public class DefaultConfig extends AbstractConfig {
     private PropertiesProvider aggregateFiles(final String... configFiles) throws IOException {
         PropertiesProvider aggregatedProperties = new BasicPropertiesProvider();
         for (String configFile : configFiles) {
-            aggregatedProperties = new FilePropertiesProvider(new File(configFile), aggregatedProperties);
+            final File file = new File(configFile);
+            if (file.exists()) {
+                logger.info("Adding config file " + file.getPath());
+                aggregatedProperties = new FilePropertiesProvider(file, aggregatedProperties);
+            } else {
+                logger.warn("Missing config file " + file.getPath() + ". File is skipped.");
+            }
         }
         return aggregatedProperties;
     }
