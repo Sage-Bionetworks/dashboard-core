@@ -7,14 +7,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CommandArgsPropertyReaderTest {
+public class SystemPropertyReaderTest {
 
     private String key;
     private String value;
 
     @Before
     public void before() {
-        key = CommandArgsPropertyReaderTest.class.getName();
+        key = SystemPropertyReaderTest.class.getName();
         value = key + "value";
         System.setProperty(key, value);
     }
@@ -26,7 +26,7 @@ public class CommandArgsPropertyReaderTest {
 
     @Test
     public void test() {
-        PropertyReader reader = new CommandArgsPropertyReader();
+        PropertyReader reader = new SystemPropertyReader();
         assertEquals(value, reader.read(key));
         assertNull(reader.read("SomethingThatDoesNotExist"));
     }

@@ -19,7 +19,6 @@ public class DefaultConfigTest {
     public void after() {
         System.clearProperty("key.a");
         System.clearProperty(PropertyReader.STACK);
-        System.clearProperty(PropertyReader.STACK_PASSWORD);
     }
 
     @Test

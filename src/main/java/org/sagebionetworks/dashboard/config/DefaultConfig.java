@@ -16,23 +16,23 @@ import java.util.Properties;
  */
 public class DefaultConfig extends AbstractConfig {
 
-    public DefaultConfig(final String configFile) throws IOException {
-        // Read about the stack
-        PropertiesProvider stackProvider =
-                new CommandArgsPropertiesProvider(
-                new EnvPropertiesProvider(
-                new FilePropertiesProvider(new File(configFile),
-                new BasicPropertiesProvider())));
-        Properties propertiesForStack = stackProvider.getProperties();
-        String stackName = propertiesForStack.getProperty(PropertyReader.STACK);
+    public DefaultConfig(final String... configFiles) throws IOException {
+        // Aggregate properties from files
+        final PropertiesProvider filePropertiesProvider = aggregateFiles(configFiles);
+        // Further aggregate with environment variables and system properties
+        final PropertiesProvider propertiesProvider = new SystemPropertiesProvider(
+                new EnvPropertiesProvider(filePropertiesProvider));
+        // Read the stack
+        final String stackName = propertiesProvider.getProperties().getProperty(PropertyReader.STACK);
         if (stackName != null) {
             stack = Stack.valueOf(stackName.toUpperCase());
         } else {
             stack = Stack.LOCAL;
         }
-        String stackPassword = propertiesForStack.getProperty(PropertyReader.STACK_PASSWORD);
-        // Set up the properties
-        PropertiesProvider provider = createProvider(stack, stackPassword, configFile);
+        // Set up the final properties based on the stack
+        final PropertiesProvider provider = new SystemPropertiesProvider(
+                new EnvPropertiesProvider(
+                new StackPropertiesProvider(stack, filePropertiesProvider)));
         properties = provider.getProperties();
     }
 
@@ -46,20 +46,12 @@ public class DefaultConfig extends AbstractConfig {
         return properties.getProperty(key);
     }
 
-    private PropertiesProvider createProvider(final Stack stack, final String stackPassword,
-            final String configFile) throws IOException {
-        if (stackPassword != null && !stackPassword.isEmpty()) {
-            return
-                    new CommandArgsPropertiesProvider(
-                    new EnvPropertiesProvider(
-                    new StackPropertiesProvider(stack,
-                    new FilePropertiesProvider(new File(configFile)))));
+    private PropertiesProvider aggregateFiles(final String... configFiles) throws IOException {
+        PropertiesProvider aggregatedProperties = new BasicPropertiesProvider();
+        for (String configFile : configFiles) {
+            aggregatedProperties = new FilePropertiesProvider(new File(configFile), aggregatedProperties);
         }
-        return
-                new CommandArgsPropertiesProvider(
-                new EnvPropertiesProvider(
-                new StackPropertiesProvider(stack,
-                new FilePropertiesProvider(new File(configFile)))));
+        return aggregatedProperties;
     }
 
     private final Stack stack;

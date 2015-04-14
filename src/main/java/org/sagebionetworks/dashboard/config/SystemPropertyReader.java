@@ -1,6 +1,6 @@
 package org.sagebionetworks.dashboard.config;
 
-public class CommandArgsPropertyReader implements PropertyReader {
+public class SystemPropertyReader implements PropertyReader {
 
     @Override
     public String read(final String key) {

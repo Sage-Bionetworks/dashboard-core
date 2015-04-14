@@ -21,7 +21,6 @@ public class BasicPropertiesProvider implements PropertiesProvider {
     private Properties getBasicProperties() {
         Properties properties = new Properties();
         properties.setProperty(PropertyReader.STACK, Stack.LOCAL.name());
-        properties.setProperty(PropertyReader.STACK_PASSWORD, "");
         return properties;
     }
 
