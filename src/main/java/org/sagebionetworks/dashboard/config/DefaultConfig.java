@@ -52,9 +52,8 @@ public class DefaultConfig extends AbstractConfig {
             return
                     new CommandArgsPropertiesProvider(
                     new EnvPropertiesProvider(
-                    new DecryptedPropertiesProvider(stackPassword,
                     new StackPropertiesProvider(stack,
-                    new FilePropertiesProvider(new File(configFile))))));
+                    new FilePropertiesProvider(new File(configFile)))));
         }
         return
                 new CommandArgsPropertiesProvider(

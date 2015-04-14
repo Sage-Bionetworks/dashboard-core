@@ -36,16 +36,4 @@ public class DefaultConfigTest {
         assertEquals(52L, config.getLong("key.e"));
         assertTrue(config.getBoolean("key.f"));
     }
-
-    @Test
-    public void testEncryption() throws Exception {
-        System.setProperty(PropertyReader.STACK, Stack.PROD.name());
-        System.setProperty(PropertyReader.STACK_PASSWORD,
-                "S7u5V12WCIXRV5SZbINKywUXEOsiNtevaJQYIaqEnKw=");
-        String configFile = getClass().getResource("/test.config").getFile(); 
-        Config config = new DefaultConfig(configFile);
-        assertEquals(Stack.PROD, config.getStack());
-        assertEquals("prodValueB", config.get("key.b"));
-        assertEquals("prodValueD", config.get("key.d"));
-    }
 }
